@@ -1,0 +1,31 @@
+{
+  "referrals": [
+    {
+      "id": "kraken",
+      "title": "Kraken",
+      "description": "Hey! I added $75 to your Kraken account. Unlock it after your first trade of $200.",
+      "code": "49bcpqjs",
+      "link": "https://invite.kraken.com/JDNW/ttjfovo1",
+      "icon": "🦑",
+      "tags": ["crypto", "trading", "finance"]
+    },
+    {
+      "id": "proton-mail",
+      "title": "Proton Mail",
+      "description": "Get a free month of Mail Plus from Proton Mail - secure, private email.",
+      "code": null,
+      "link": "https://pr.tn/ref/5N3H425E6QB0",
+      "icon": "🔒",
+      "tags": ["privacy", "email", "security"]
+    },
+    {
+      "id": "crysp",
+      "title": "Crysp",
+      "description": "Premium THCA products - their rosin is great and the carts are top quality.",
+      "code": null,
+      "link": "https://crysp.co/cs/10423/",
+      "icon": "🌿",
+      "tags": ["cannabis", "wellness", "premium"]
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 This is the first post on my new blog. This is just a test
 
 **Date:** 2024-01-15
+**Tags:** general, introduction, blog
 
 ## What to Expect
 

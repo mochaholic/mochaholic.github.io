@@ -159,11 +159,18 @@ class BlogApp {
             date = dateMatch[1];
         }
         
-        // Create excerpt from first paragraph (skip title and date)
+        // Extract tags from markdown content
+        let tags = [];
+        const tagsMatch = markdown.match(/\*\*Tags:\*\*\s*(.+)/);
+        if (tagsMatch) {
+            tags = tagsMatch[1].split(',').map(tag => tag.trim().toLowerCase());
+        }
+        
+        // Create excerpt from first paragraph (skip title, date, and tags)
         let excerpt = '';
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i].trim();
-            if (line && !line.startsWith('#') && !line.startsWith('**Date:**')) {
+            if (line && !line.startsWith('#') && !line.startsWith('**Date:**') && !line.startsWith('**Tags:**')) {
                 excerpt = line;
                 break;
             }
@@ -174,7 +181,8 @@ class BlogApp {
             title: title,
             date: date,
             excerpt: excerpt,
-            content: markdown
+            content: markdown,
+            tags: tags
         };
     }
 
@@ -256,26 +264,46 @@ class BlogApp {
         const post = this.posts.find(p => p.id === postId);
         if (!post) return;
 
-        // Update page content
-        document.getElementById('post-title').textContent = post.title;
-        document.getElementById('post-date').textContent = new Date(post.date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+        // Check if we're on a page that has post elements (index.html)
+        const postTitle = document.getElementById('post-title');
+        const postDate = document.getElementById('post-date');
+        const postContent = document.getElementById('post-content');
+        const postReferralWidget = document.getElementById('post-referral-widget');
 
-        // Convert markdown to HTML (simple implementation)
-        document.getElementById('post-content').innerHTML = this.markdownToHtml(post.content);
+        if (postTitle && postDate && postContent) {
+            // We're on index.html - show post inline
+            postTitle.textContent = post.title;
+            postDate.textContent = new Date(post.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
 
-        // Show post page
-        this.showPage('post');
+            // Convert markdown to HTML (simple implementation)
+            postContent.innerHTML = this.markdownToHtml(post.content);
 
-        // Update navigation
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => link.classList.remove('active'));
-        
-        // Update URL without page reload
-        history.pushState({ page: 'post', postId: postId }, '', `#post/${postId}`);
+            // Show relevant referral for this post
+            const relevantReferral = this.getRandomReferralForBlog(post.tags);
+            if (relevantReferral && postReferralWidget) {
+                this.renderReferral(relevantReferral, 'post-referral-widget');
+            } else if (postReferralWidget) {
+                // Show error if no referrals loaded
+                postReferralWidget.innerHTML = '<div class="referral-error">Unable to load recommendations</div>';
+            }
+
+            // Show post page
+            this.showPage('post');
+
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Update URL without page reload
+            history.pushState({ page: 'post', postId: postId }, '', `#post/${postId}`);
+        } else {
+            // We're on blogs.html - redirect to index.html with post hash
+            window.location.href = `index.html#post/${postId}`;
+        }
     }
 
     markdownToHtml(markdown) {
@@ -339,6 +367,7 @@ class BlogApp {
 
     setupWidgets() {
         this.setupWeatherWidget();
+        this.setupReferralWidget();
     }
 
     async setupWeatherWidget() {
@@ -399,6 +428,95 @@ class BlogApp {
         return '🌤️';
     }
 
+    async setupReferralWidget() {
+        try {
+            const response = await fetch('data/referrals.json');
+            if (response.ok) {
+                const data = await response.json();
+                this.referrals = data.referrals;
+                this.showRandomReferral();
+            } else {
+                console.error('Failed to load referrals:', response.status);
+                this.setReferralError();
+            }
+        } catch (error) {
+            console.error('Error loading referrals:', error);
+            this.setReferralError();
+        }
+    }
+
+    showRandomReferral() {
+        const randomIndex = Math.floor(Math.random() * this.referrals.length);
+        this.renderReferral(this.referrals[randomIndex]);
+    }
+
+    getRandomReferralForBlog(blogTags = []) {
+        // Ensure referrals are loaded
+        if (!this.referrals || this.referrals.length === 0) {
+            return null;
+        }
+        
+        // Filter referrals based on blog tags, or show random if no match
+        const matchingReferrals = this.referrals.filter(referral => 
+            referral.tags.some(tag => blogTags.includes(tag))
+        );
+        
+        const referralsToChooseFrom = matchingReferrals.length > 0 ? matchingReferrals : this.referrals;
+        const randomIndex = Math.floor(Math.random() * referralsToChooseFrom.length);
+        return referralsToChooseFrom[randomIndex];
+    }
+
+    setReferralError() {
+        const container = document.getElementById('referral-widget');
+        if (container) {
+            container.innerHTML = '<div class="referral-error">Unable to load recommendations</div>';
+        }
+    }
+
+    renderReferral(referral, containerId = 'referral-widget') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        // Generate code section only if referral has a code
+        const codeSection = referral.code ? `
+            <div class="referral-code">
+                <span class="code-label">Code:</span>
+                <code class="code-value">${referral.code}</code>
+                <button class="copy-code-btn" data-code="${referral.code}">📋</button>
+            </div>
+        ` : '';
+        
+        container.innerHTML = `
+            <div class="referral-content">
+                <div class="referral-header">
+                    <span class="referral-icon">${referral.icon}</span>
+                    <h4>${referral.title}</h4>
+                </div>
+                <p class="referral-description">${referral.description}</p>
+                <div class="referral-actions">
+                    <a href="${referral.link}" target="_blank" rel="noopener" class="referral-link">
+                        Use Referral
+                    </a>
+                    ${codeSection}
+                </div>
+            </div>
+        `;
+
+        // Add copy functionality only if there's a code
+        if (referral.code) {
+            const copyBtn = container.querySelector('.copy-code-btn');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(referral.code).then(() => {
+                        copyBtn.textContent = '✓';
+                        setTimeout(() => {
+                            copyBtn.textContent = '📋';
+                        }, 2000);
+                    });
+                });
+            }
+        }
+    }
 
 }
 
