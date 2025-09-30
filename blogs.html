@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs - pivot ☕</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="logo">
+                    <h1>pivot <span class="coffee">☕</span></h1>
+                </div>
+                
+                <nav class="nav">
+                    <a href="index.html" class="nav-link" data-page="home">Home</a>
+                    <a href="blogs.html" class="nav-link active" data-page="blogs">Blogs</a>
+                    <a href="projects.html" class="nav-link" data-page="projects">Projects</a>
+                    <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
+                </nav>
+
+                <div class="theme-toggle">
+                    <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+
+                <div class="crypto-donate">
+                    <button class="donate-btn" id="donate-btn">Donate Crypto</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Blogs Page -->
+                <section id="blogs-page" class="page active">
+                    <div class="page-header">
+                        <h2>All Posts</h2>
+                        <p>Everything I've written, in chronological order</p>
+                    </div>
+                    <div id="all-posts-list" class="posts-list">
+                        <!-- All posts will be loaded here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Crypto Donation Modal -->
+    <div id="crypto-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Support with Crypto</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>If you enjoy my content and want to support me, here are my crypto addresses:</p>
+                
+                <div class="crypto-options">
+                    <div class="crypto-option">
+                        <h4>Monero</h4>
+                        <div class="crypto-address">
+                            <code id="xmr">841ie9n4JR5ZfaomktCzQ4Uo8PM9GhRguXHCr68BiDUYMAAeEynbi9T8mbEUB7CsiuHq4RZksLAEZ5WLW5PASyoQEYhsKaD</code>
+                            <button class="copy-btn" data-address="xmr">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="crypto-option">
+                        <h4>Bitcoin</h4>
+                        <div class="crypto-address">
+                            <code id="btc">33ZMRd6WNgqNoaHX8igLWdAUJjJnMfhAck</code>
+                            <button class="copy-btn" data-address="btc">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="crypto-option">
+                        <h4>Solana</h4>
+                        <div class="crypto-address">
+                            <code id="sol">1c6N6hfJfkr2o72PmR5h536EVBBygGHQYTR1MVggAz6</code>
+                            <button class="copy-btn" data-address="sol">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="crypto-option">
+                        <h4>USDT (ERC-20)</h4>
+                        <div class="crypto-address">
+                            <code id="usdt">0xe105aeed706ea706469f0e35769c5c827fdb0400</code>
+                            <button class="copy-btn" data-address="usdt">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="crypto-option">
+                        <h4>Zcash</h4>
+                        <div class="crypto-address">
+                            <code id="zcash">t1PTDxxb37iZBvQv5ErvXw4aE9ex5Z91UYH</code>
+                            <button class="copy-btn" data-address="zcash">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="crypto-option">
+                        <h4>TON</h4>
+                        <div class="crypto-address">
+                            <code id="ton">UQDldSrU2lQy7rOHUdaaeTqEeAGDdAhQvj1P0YNESA_Jqjst</code>
+                            <button class="copy-btn" data-address="ton">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/main.js"></script>
+</body>
+</html>
