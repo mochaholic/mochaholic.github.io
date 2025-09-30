@@ -26,6 +26,15 @@
       "link": "https://crysp.co/cs/10423/",
       "icon": "🌿",
       "tags": ["cannabis", "wellness", "premium"]
+    },
+    {
+      "id": "optery",
+      "title": "Optery",
+      "description": "Privacy tool that removes your home address, phone number, email, age, family member names, and other private info from the internet.",
+      "code": null,
+      "link": "https://get.optery.com/2cqilcrj5m2e",
+      "icon": "🛡️",
+      "tags": ["privacy", "security", "data-removal"]
     }
   ]
 }
